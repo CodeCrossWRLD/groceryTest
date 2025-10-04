@@ -1,15 +1,16 @@
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class List {
 
-    public String[] itemArray;
-    private boolean[] checkedArray;
+    ArrayList<String> itemArray = new ArrayList<>();
+    private ArrayList<Boolean> checkedArray = new  ArrayList<>();
 
     Scanner scnr = new Scanner(System.in);
 
 
-    public String[] addItem() {
+    public ArrayList<String> addItem() {
 
         int numberOfItemsInList = 0;
 
@@ -25,8 +26,8 @@ public class List {
             }
         }
 
-        itemArray = new String[numberOfItemsInList];
-        checkedArray = new boolean[numberOfItemsInList];
+        itemArray = new ArrayList<String>();
+        checkedArray = new ArrayList <Boolean>();
 
         for (int i = 0; i < numberOfItemsInList; i++) {
             String newItem;
@@ -35,10 +36,11 @@ public class List {
             do {
                 System.out.print("Enter the name of item #" + (i + 1) + ": ");
                 newItem = scnr.nextLine();
+
                 isDuplicated = false;
 
                 for (int j = 0; j < i; j++) {
-                    if (newItem.equalsIgnoreCase(itemArray[j])) {
+                    if (newItem.equalsIgnoreCase(itemArray.get(j))) {
                         System.out.println("You already added this item, please try again!");
                         isDuplicated = true;
                         break;
@@ -46,44 +48,40 @@ public class List {
                 }
             } while (isDuplicated);
 
-            itemArray[i] = newItem;
-            checkedArray[i] = false;
+            itemArray.add(newItem);
+            checkedArray.add(false);
         }
 
         return itemArray;
     }
 
-    public String[] removeItem(String[] itemArray) {
+    public ArrayList<String> removeItem(ArrayList<String> itemArray) {
 
-        for (int i = 0; i < itemArray.length; i++) {
-                System.out.println((i + 1) + "). " + itemArray[i]);
+        for (int i = 0; i < itemArray.size(); i++) {
+                System.out.println((i + 1) + "). " + itemArray.get(i));
         }
 
         System.out.println("Enter the number of the item you want to remove: ");
 
         int removeIndex = scnr.nextInt() - 1;
-        String wipedItem = "";
 
-        if (removeIndex < 0 || removeIndex >= itemArray.length) {
+        if (removeIndex < 0 || removeIndex >= itemArray.size()) {
             System.out.println("Invalid choice, please try again!");
             return itemArray;
         }
 
-        for (int i = removeIndex; i < itemArray.length - 1; i++) {
-            itemArray[i] = itemArray[i + 1];
-            checkedArray[i] = checkedArray[i + 1];
-        }
-        itemArray[itemArray.length - 1] = wipedItem;
-        checkedArray[itemArray.length - 1] = false;
+        itemArray.remove(removeIndex);
+
+        checkedArray.set((itemArray.size() - 1), false);
         return itemArray;
     }
 
     public void checkItem() {
 
-        for (int i = 0; i < itemArray.length; i++) {
-            if (itemArray[i] != null && !itemArray[i].isEmpty()) {
-                System.out.println((i + 1) + "). " + itemArray[i] +
-                        (checkedArray[i] ? " [✔]" : ""));
+        for (int i = 0; i < itemArray.size(); i++) {
+            if (itemArray.get(i) != null && !(itemArray.get(i)).isEmpty()) {
+                System.out.println((i + 1) + "). " + itemArray.get(i) +
+                        (checkedArray.get(i) ? " [✔]" : ""));
             }
         }
 
@@ -94,13 +92,13 @@ public class List {
                 int checkindex = scnr.nextInt() - 1;
                 scnr.nextLine();
 
-                if (checkindex < 0 || checkindex >= itemArray.length) {
+                if (checkindex < 0 || checkindex >= itemArray.size()) {
                     System.out.println("Invalid number, please try again!");
-                } else if (itemArray[checkindex] == null || itemArray[checkindex].isEmpty()) {
+                } else if (itemArray.get(checkindex) == null || (itemArray.get(checkindex)).isEmpty()) {
                     System.out.println("That slot is empty, please try again!");
                 } else {
-                    checkedArray[checkindex] = true;
-                    System.out.println(itemArray[checkindex] + " has been checked off!");
+                    checkedArray.set(checkindex, true);
+                    System.out.println(itemArray.get(checkindex) + " has been checked off!");
                     break;
                 }
             } catch (InputMismatchException e) {
@@ -113,11 +111,11 @@ public class List {
 
     public void printItem() {
 
-        for (int i = 0; i < itemArray.length; i++) {
-            if (checkedArray[i] == true) {
-                System.out.println("[✔] - " + itemArray[i]);
+        for (int i = 0; i < itemArray.size(); i++) {
+            if (checkedArray.get(i) == true) {
+                System.out.println("[✔] - " + itemArray.get(i));
             } else {
-                System.out.println("[X] - " + itemArray[i]);
+                System.out.println("[X] - " + itemArray.get(i));
             }
 
         }
